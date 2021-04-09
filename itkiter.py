@@ -52,7 +52,7 @@ def cli(path, image_suffix, segmentation_suffix, additional_image_suffix, extens
         if additional_image_suffix:
             cmd = f'{cmd} {" ".join(["-o"] + [a for a in d["add_images"]])}'
         cmds.append(cmd)
-        print(f'[{i+1} of {len(datasets)}]')
+        print(f'\n[{i+1} of {len(datasets)}]')
         if dry:
             print(f'{cmd}\n')
         else:
