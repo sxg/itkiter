@@ -13,6 +13,7 @@ import os
 @click.option('-a', '--additional-image-suffix', required=True, multiple=True, help='Suffix to add to the folder name to create the file name for an additional image.')
 @click.option('-e', '--extension', default='.nii.gz', help='Extension for image and segmentation files. Defaults to .nii.gz.')
 @click.option('-d', '--dry', is_flag=True, help="Dry run that only prints the command that would normally be called. The command is not actually run.")
+@click.version_option()
 def cli(path, image_suffix, segmentation_suffix, additional_image_suffix, extension, dry):
     '''Tool to iterate over multiple folders of images and segmentations with ITK-SNAP.'''
 
