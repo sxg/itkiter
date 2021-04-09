@@ -33,13 +33,13 @@ def cli(path, image_suffix, segmentation_suffix, additional_image_suffix, extens
                 if not os.path.exists(val):
                     raise FileNotFoundError(val)
                 else:
-                    d[key] = val.replace(' ', '\ ')
+                    d[key] = val.replace(' ', r'\ ')
             elif key == 'add_images':
                 for i, a in enumerate(val):
                     if not os.path.exists(a):
                         raise FileNotFoundError(a)
                     else:
-                        d[key][i] = a.replace(' ', '\ ')
+                        d[key][i] = a.replace(' ', r'\ ')
         datasets.append(d)
 
     cmds = []
