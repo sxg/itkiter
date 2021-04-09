@@ -56,6 +56,3 @@ def cli(path, image_suffix, segmentation_suffix, additional_image_suffix, extens
         user_input = input('Any key to continue ("q" to quit): ').lower()
         if user_input == 'q' or user_input == 'quit':
             exit(0)
-
-# if __name__ == '__main__':
-    # cli()
