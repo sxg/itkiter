@@ -9,8 +9,8 @@ import os
 @click.command()
 @click.option('-p', '--path', default=pathlib.Path().absolute(), help='Path to the folders containing images and segmentations. Defaults to the current path.')
 @click.option('-i', '--image-suffix', required=True, help='Suffix to add to the folder name to create the main image file name.')
-@click.option('-s', '--segmentation-suffix', required=True, help='Suffix to add to the folder name to create the segmentation file name.')
-@click.option('-a', '--additional-image-suffix', required=True, multiple=True, help='Suffix to add to the folder name to create the file name for an additional image.')
+@click.option('-s', '--segmentation-suffix', help='Suffix to add to the folder name to create the segmentation file name.')
+@click.option('-a', '--additional-image-suffix', multiple=True, help='Suffix to add to the folder name to create the file name for an additional image.')
 @click.option('-e', '--extension', default='.nii.gz', help='Extension for image and segmentation files. Defaults to .nii.gz.')
 @click.option('-d', '--dry', is_flag=True, help="Dry run that only prints the command that would normally be called. The command is not actually run.")
 @click.version_option()
@@ -26,8 +26,10 @@ def cli(path, image_suffix, segmentation_suffix, additional_image_suffix, extens
     for f in folders:
         d = {}
         d['image'] = os.path.join(path, f, f + image_suffix + extension)
-        d['seg'] = os.path.join(path, f, f + segmentation_suffix + extension)
-        d['add_images'] = [os.path.join(path, f, f + a + extension) for a in additional_image_suffix]
+        if segmentation_suffix:
+            d['seg'] = os.path.join(path, f, f + segmentation_suffix + extension)
+        if additional_image_suffix:
+            d['add_images'] = [os.path.join(path, f, f + a + extension) for a in additional_image_suffix]
         for key, val in d.copy().items():
             if key != 'add_images':
                 if not os.path.exists(val):
@@ -45,8 +47,10 @@ def cli(path, image_suffix, segmentation_suffix, additional_image_suffix, extens
     cmds = []
     for i, d in enumerate(datasets):
         cmd = f'itksnap -g {d["image"]}'
-        cmd = f'{cmd} -s {d["seg"]}'
-        cmd = f'{cmd} {" ".join(["-o"] + [a for a in d["add_images"]])}'
+        if segmentation_suffix:
+            cmd = f'{cmd} -s {d["seg"]}'
+        if additional_image_suffix:
+            cmd = f'{cmd} {" ".join(["-o"] + [a for a in d["add_images"]])}'
         cmds.append(cmd)
         print(f'[{i+1} of {len(datasets)}]')
         if dry:
