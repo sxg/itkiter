@@ -5,7 +5,6 @@ CLI to iterate over multiple folders of images and segmentations with ITK-SNAP.
 import click
 import pathlib
 import os
-import sys
 
 @click.command()
 @click.option('-p', '--path', default=pathlib.Path().absolute(), help='Path to the folders containing images and segmentations. Defaults to the current path.')
