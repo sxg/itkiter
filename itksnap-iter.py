@@ -27,12 +27,18 @@ def cli(path, image_suffix, segmentation_suffix, additional_image_suffix, extens
         d['image'] = os.path.join(path, f, f + image_suffix + extension)
         d['seg'] = os.path.join(path, f, f + segmentation_suffix + extension)
         d['add_images'] = [os.path.join(path, f, f + a + extension) for a in additional_image_suffix]
-        for key, val in d.items():
-            if key != 'add_images' and not os.path.exists(val): raise FileNotFoundError(val)
+        for key, val in d.copy().items():
+            if key != 'add_images':
+                if not os.path.exists(val):
+                    raise FileNotFoundError(val)
+                else:
+                    d[key] = val.replace(' ', '\ ')
             elif key == 'add_images':
-                for a in val:
-                    if not os.path.exists(a): raise FileNotFoundError(a)
-            
+                for i, a in enumerate(val):
+                    if not os.path.exists(a):
+                        raise FileNotFoundError(a)
+                    else:
+                        d[key][i] = a.replace(' ', '\ ')
         datasets.append(d)
 
     cmds = []
