@@ -20,5 +20,31 @@ def cli(path, image_suffix, segmentation_suffix, additional_image_suffix, extens
     folders = sorted(os.listdir(os.path.abspath(path)))
     folders = [f for f in folders if f != '.DS_Store']
 
+    # Create file names
+    datasets = []
+    for f in folders:
+        d = {}
+        d['image'] = os.path.join(path, f, f + image_suffix + extension)
+        d['seg'] = os.path.join(path, f, f + segmentation_suffix + extension)
+        d['add_images'] = [os.path.join(path, f, f + a + extension) for a in additional_image_suffix]
+        for key, val in d.items():
+            if key != 'add_images' and not os.path.exists(val): raise FileNotFoundError(val)
+            elif key == 'add_images':
+                for a in val:
+                    if not os.path.exists(a): raise FileNotFoundError(a)
+            
+        datasets.append(d)
+
+    cmds = []
+    for d in datasets:
+        cmd = f'itksnap -g {d["image"]}'
+        cmd = f'{cmd} -s {d["seg"]}'
+        cmd = f'{cmd} {" ".join(["-o"] + [a for a in d["add_images"]])}'
+        cmds.append(cmd)
+        if dry:
+            print(f'{cmd}\n')
+        else:
+            os.system(cmd)
+
 if __name__ == '__main__':
     cli()
