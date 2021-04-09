@@ -36,11 +36,12 @@ def cli(path, image_suffix, segmentation_suffix, additional_image_suffix, extens
         datasets.append(d)
 
     cmds = []
-    for d in datasets:
+    for i, d in enumerate(datasets):
         cmd = f'itksnap -g {d["image"]}'
         cmd = f'{cmd} -s {d["seg"]}'
         cmd = f'{cmd} {" ".join(["-o"] + [a for a in d["add_images"]])}'
         cmds.append(cmd)
+        print(f'[{i+1} of {len(datasets)}]')
         if dry:
             print(f'{cmd}\n')
         else:
