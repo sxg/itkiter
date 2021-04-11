@@ -11,7 +11,7 @@ import os
 @click.option('-i', '--image-suffix', required=True, help='Suffix to add to the folder name to create the main image file name.')
 @click.option('-s', '--segmentation-suffix', help='Suffix to add to the folder name to create the segmentation file name.')
 @click.option('-a', '--additional-image-suffix', multiple=True, help='Suffix to add to the folder name to create the file name for an additional image.')
-@click.option('-e', '--extension', default='.nii.gz', help='Extension for image and segmentation files. Defaults to .nii.gz.')
+@click.option('-e', '--extension', default='.nii.gz', help='Extension for image and segmentation files. The leading "." is optional. Defaults to .nii.gz.')
 @click.option('-d', '--dry', is_flag=True, help="Dry run that only prints the command that would normally be called. The command is not actually run.")
 @click.version_option()
 def cli(path, image_suffix, segmentation_suffix, additional_image_suffix, extension, dry):
@@ -20,6 +20,9 @@ def cli(path, image_suffix, segmentation_suffix, additional_image_suffix, extens
     # Sort and filter the folders at the `path`
     folders = sorted(os.listdir(os.path.abspath(path)))
     folders = [f for f in folders if f != '.DS_Store']
+
+    # Ensure the leading '.' on the extension is optional
+    if extension[0] != '.': extension = f'.{extension}'
 
     # Create file names
     datasets = []
