@@ -6,7 +6,7 @@ import setuptools
 
 setuptools.setup(
     name='itkiter',
-    version='1.1.0',
+    version='1.1.1',
     description='CLI to iterate over multiple folders of images and segmentations with ITK-SNAP.',
     author='Satyam Ghodasara',
     author_email='sghodas@gmail.com',
